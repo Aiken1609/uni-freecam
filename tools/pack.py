@@ -10,7 +10,7 @@
     python tools/pack.py check --stage DIR [--target-dir DIR]
                                                # cargo check the game that `apply` staged
 
-The core (core/freecam_core.rs) is the single source of the camera logic. Each adapter
+The core (src/freecam_core.rs) is the single source of the camera logic. Each adapter
 gets a copy made at stage time, so the copies can never drift apart.
 """
 import argparse
@@ -25,11 +25,10 @@ import tempfile
 import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-CORE = ROOT / "core" / "freecam_core.rs"
+CORE = ROOT / "src" / "freecam_core.rs"
 COMPAT = json.loads((ROOT / "compat.json").read_text(encoding="utf-8"))
 LEGACY_SRC = ROOT / "legacy" / COMPAT["id"]
 BUILD = ROOT / "build"
-NATIVE_SRC = ROOT / "native"
 SHA = re.compile(r"^[0-9a-f]{40}$")
 
 
@@ -115,27 +114,32 @@ def package_legacy():
 
 
 def package_native(horizon, mixins):
-    """A .hmod for the typed-API route: manifest with the chosen pins, Cargo.toml, src/, assets/."""
-    horizon = horizon or COMPAT["native"]["horizon_revision"]
-    mixins = mixins or COMPAT["native"]["horizon_mixins_revision"]
+    """A .hmod for the typed-API route, from the project at the repository root.
+
+    `--horizon` / `--mixins` rewrite the pins in the packaged manifest only; the committed
+    horizon-mod.toml is left alone.
+    """
+    manifest_path = ROOT / "horizon-mod.toml"
+    manifest = manifest_path.read_text(encoding="utf-8")
     for name, value in (("horizon", horizon), ("mixins", mixins)):
+        if value is None:
+            continue
         if not SHA.match(value):
             raise SystemExit(f"--{name} must be 40 lowercase hex characters, got {value!r}")
-    manifest = (NATIVE_SRC / "horizon-mod.toml").read_text(encoding="utf-8")
-    manifest = manifest.replace("@HORIZON@", horizon).replace("@MIXINS@", mixins)
-    version = manifest_value(NATIVE_SRC / "horizon-mod.toml", "version")
+        manifest = re.sub(rf'^{name} = ".*"$', f'{name} = "{value}"', manifest, flags=re.M)
+    version = manifest_value(manifest_path, "version")
     if version != COMPAT["version"] or version != core_version():
-        raise SystemExit("version differs between native manifest, compat.json and the core")
+        raise SystemExit("version differs between horizon-mod.toml, compat.json and the core")
     target = BUILD / f"{COMPAT['id']}-{version}.hmod"
     BUILD.mkdir(exist_ok=True)
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("horizon-mod.toml", manifest)
-        archive.write(NATIVE_SRC / "Cargo.toml", "Cargo.toml")
-        archive.write(NATIVE_SRC / "src" / "lib.rs", "src/lib.rs")
-        archive.write(CORE, "src/freecam_core.rs")
-        for file in sorted((NATIVE_SRC / "assets").rglob("*")):
+        archive.write(ROOT / "Cargo.toml", "Cargo.toml")
+        for file in sorted((ROOT / "src").rglob("*.rs")):
+            archive.write(file, file.relative_to(ROOT).as_posix())
+        for file in sorted((ROOT / "assets").rglob("*")):
             if file.is_file():
-                archive.write(file, file.relative_to(NATIVE_SRC).as_posix())
+                archive.write(file, file.relative_to(ROOT).as_posix())
     print(f"{target}\nsha256 {hashlib.sha256(target.read_bytes()).hexdigest()}")
     return target
 

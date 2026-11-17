@@ -6,7 +6,7 @@ priority = 100
 [compatibility]
 horizon_revision = "9f42064c11efe7ef3e5ed2baad7ddc2a3b36eea0"
 
-# runtime.rs is core/freecam_core.rs, copied in by tools/pack.py.
+# runtime.rs is src/freecam_core.rs, copied in by tools/pack.py.
 [[module]]
 id = "runtime"
 file = "crates/horizon-client/src/game.rs"

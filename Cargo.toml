@@ -1,10 +1,9 @@
 [package]
-name = "uni-freecam-core"
+name = "mod-uni-freecam"
 version = "0.1.0"
 edition = "2024"
-license = "MIT"
-publish = false
-description = "Freecam camera logic shared by every Horizon adapter. Host-side tests only; the adapters compile this file into the game."
 
-[lib]
-path = "core/freecam_core.rs"
+[dependencies]
+# The pinned SDK's API crate, fetched into .horizon/sdk/ by any `cargo horizon-mod` command (the
+# launcher builds against its own copy of the same build).
+horizon-mod-api = { path = ".horizon/sdk/api/crates/horizon-mod-api" }
