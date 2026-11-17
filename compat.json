@@ -1,0 +1,17 @@
+{
+  "id": "uni_freecam",
+  "version": "0.1.0",
+  "game": "26.3",
+  "legacy": {
+    "route": "mixin bundle on the native hook points (native_hooks.rs)",
+    "horizon_revision": "9f42064c11efe7ef3e5ed2baad7ddc2a3b36eea0",
+    "horizon_nightly": "2026-11-13",
+    "horizon_mixins_revision": "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"
+  },
+  "native": {
+    "route": "typed mod API (horizon-mod-api hooks)",
+    "horizon_revision": "87601bdeb69fa343280239427b5922aef91783a7",
+    "horizon_main": "2026-11-17",
+    "horizon_mixins_revision": "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"
+  }
+}

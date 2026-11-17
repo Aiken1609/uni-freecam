@@ -1,0 +1,14 @@
+{
+  "key.uni_freecam.toggle": "Toggle freecam",
+  "key.uni_freecam.category": "Universal Freecam",
+  "uni_freecam.setting.speed": "Flight speed (blocks per tick)",
+  "uni_freecam.setting.speed.tooltip": "How fast the camera flies. The mouse wheel changes it while flying, until you leave freecam.",
+  "uni_freecam.setting.sprint": "Sprint multiplier",
+  "uni_freecam.setting.sprint.tooltip": "How much faster the camera goes while the sprint key is held.",
+  "uni_freecam.setting.noclip": "Fly through blocks",
+  "uni_freecam.setting.noclip.tooltip": "When off, the camera stops at solid blocks and slides along them.",
+  "uni_freecam.setting.smooth": "Smooth motion",
+  "uni_freecam.setting.smooth.tooltip": "Ease into and out of motion instead of moving at full speed at once.",
+  "uni_freecam.setting.fly_look": "Fly where you look",
+  "uni_freecam.setting.fly_look.tooltip": "Forward follows the look direction, up and down included. When off, forward stays level."
+}
