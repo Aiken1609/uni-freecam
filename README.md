@@ -64,33 +64,16 @@ horizon-mod.toml     manifest dan pin build Horizon
 Cargo.toml           depends on horizon-mod-api (diambil launcher ke .horizon/sdk/)
 src/lib.rs           hook ke game
 src/freecam_core.rs  logika kamera, tanpa dependensi, ada 15 test
-core-tests/          crate kecil untuk menjalankan test inti: cd core-tests && cargo test
-legacy/              bundle horizon-mixins untuk Nightly 9f42064 (lihat bawah)
-tools/pack.py        pembuat paket .hmod / .hnmod
-compat.json          build mana yang pernah dicek
+assets/              file bahasa
 ```
 
-Logika kamera ada di satu file dan tidak tahu apa-apa soal game, jadi kalau API hook berubah, yang diubah cukup
-`src/lib.rs`.
+Launcher membaca root repo ini sebagai satu project mod dan menolak file `.rs` atau `.toml` di luar `src/`,
+jadi repo sengaja dibuat minimal. Logika kamera ada di satu file dan tidak tahu apa-apa soal game; kalau API
+hook berubah, yang diubah cukup `src/lib.rs`.
 
-## Build lama (Nightly 9f42064)
+Test inti: setelah `cargo horizon-mod check` sekali (mengambil SDK), jalankan `cargo test`.
 
-Launcher terbaru menolak format lama (`horizon-mixin.toml`, `horizon-native.json`), jadi folder `legacy/` hanya
-berguna kalau kamu masih memakai launcher dan game yang lama:
-
-```
-python tools/pack.py package-legacy        # build/uni_freecam-0.1.0.hnmod
-```
-
-Bundle ini sudah dicek terhadap source `9f42064` (`cargo check -p horizon-client` lulus), tapi tidak bisa
-dipakai bersama launcher yang memakai format baru.
-
-## Bikin paket untuk build lain
-
-```
-python tools/pack.py package-native --horizon <sha 40 karakter hex>
-```
-
-Hasilnya `build/uni_freecam-0.1.0.hmod`; pin hanya diganti di paket, bukan di repo.
+Untuk membuat paket `.hmod` dengan pin build lain, ubah `horizon = "..."` di `horizon-mod.toml` (atau jalankan
+`cargo horizon-mod update`), lalu `cargo horizon-mod build`.
 
 Lisensi MIT. Logika terbang terinspirasi `freecam_plus` (umbx-dot, MIT).
