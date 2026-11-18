@@ -23,12 +23,16 @@ const ALT: u32 = 4;
 
 /// The vanilla mappings the camera takes over while it flies, in the order of `freecam_core`'s inputs.
 const FLY_MAPPINGS: [&str; fc::INPUTS] = ["key.forward", "key.back", "key.left", "key.right", "key.jump", "key.sneak", "key.sprint"];
-/// Mappings that must not reach the player while the camera is away: moving, and acting on the
-/// world from the player's own view (attack, use, pick, drop, swap, hotbar). They are read by
+/// Mappings that must not reach the player while the camera is away: moving, and changing the
+/// perspective (the body would vanish in first person). Everything else, such as attack, use,
+/// drop, swap and the hotbar, still reaches the player so items work as usual. They are read by
 /// mapping name, never by key, so whatever the player rebound them to keeps working.
-const BLOCKED_MAPPINGS: [&str; 21] = [
+const BLOCKED_MAPPINGS: [&str; 8] = [
     "key.forward", "key.back", "key.left", "key.right", "key.jump", "key.sneak", "key.sprint",
-    "key.attack", "key.use", "key.pickItem", "key.drop", "key.swapOffhand",
+    "key.togglePerspective",
+];
+/// Hotbar mappings: free to use, except while Alt is held (Alt+digit belongs to the saved spots).
+const HOTBAR_MAPPINGS: [&str; 9] = [
     "key.hotbar.1", "key.hotbar.2", "key.hotbar.3", "key.hotbar.4", "key.hotbar.5",
     "key.hotbar.6", "key.hotbar.7", "key.hotbar.8", "key.hotbar.9",
 ];
@@ -39,6 +43,8 @@ struct Mod {
     start_pending: AtomicBool,
     /// The perspective to give back, as 0 first person, 1 third back, 2 third front.
     view: AtomicU8,
+    /// Alt was held at the last key event.
+    alt: AtomicBool,
 }
 
 fn view_index(view: CameraType) -> u8 {
@@ -131,6 +137,10 @@ impl Hooks for Mod {
             fc::with(|f| f.reset());
             return;
         }
+        if host.camera_type() != CameraType::ThirdPersonBack {
+            // Keep the body visible: it vanishes in first person while the camera is away.
+            host.set_camera_type(CameraType::ThirdPersonBack);
+        }
         if !playing {
             // A screen is open: the keys are not read, so nothing is still held.
             fc::with(|f| f.release_all());
@@ -147,10 +157,13 @@ impl Hooks for Mod {
             fc::with(|f| f.hold(input, event.pressed));
         }
         // A release always goes through (the game holds nothing anyway); only presses are dropped.
-        if event.pressed && BLOCKED_MAPPINGS.contains(&event.mapping) { Flow::Cancel } else { Flow::Continue }
+        let blocked = BLOCKED_MAPPINGS.contains(&event.mapping)
+            || (self.alt.load(Ordering::Relaxed) && HOTBAR_MAPPINGS.contains(&event.mapping));
+        if event.pressed && blocked { Flow::Cancel } else { Flow::Continue }
     }
 
     fn input_key(&self, host: &mut dyn ClientHost, event: &mut InputKeyEvent<'_>) {
+        self.alt.store(event.modifiers & ALT != 0, Ordering::Relaxed);
         if event.action != KeyAction::Press || !host.playing() || !fc::with(|f| f.active()) {
             return;
         }
@@ -171,6 +184,10 @@ impl Hooks for Mod {
 
     fn mouse_scrolling(&self, host: &mut dyn ClientHost, event: &mut MouseScrollingEvent) -> Flow {
         if !host.playing() {
+            return Flow::Continue;
+        }
+        // Plain scrolling stays with the hotbar; Alt+scroll changes the flight speed.
+        if !self.alt.load(Ordering::Relaxed) {
             return Flow::Continue;
         }
         let steps = event.accumulated[1] as f32;

@@ -40,13 +40,14 @@ yang lebih tua dan build gagal di tahap SDK, update Horizon dulu, atau pindahkan
 - Terbang pakai kontrol Minecraft kamu sendiri: maju, mundur, kiri, kanan, lompat (naik), sneak (turun), dan
   sprint (lebih cepat), seperti di spectator. Kalau kamu ubah keybind-nya di Controls, freecam ikut berubah, tidak
   ada pengaturan tombol tambahan. Bawaan: **W A S D**, **Space**, **Shift**, **Ctrl**.
-- **Scroll**: ubah kecepatan terbang selama freecam aktif
+- **Alt + scroll**: ubah kecepatan terbang selama freecam aktif (scroll biasa tetap ganti slot hotbar)
 - **Alt + 1..9**: pindah ke titik yang tersimpan; kalau slotnya kosong, posisi sekarang disimpan di situ
 - **Alt + Shift + 1..9**: simpan posisi sekarang ke slot itu
 
-Selama freecam aktif, serang, pakai item, jatuhkan item, tukar tangan, dan tombol hotbar diblokir supaya karakter tidak ikut
-bergerak atau beraksi. Kecepatan, pengali sprint, tembus blok, gerak halus, dan arah terbang bisa diatur di
-layar settings mod.
+Selama freecam aktif, karakter diam di tempat: tombol gerak (dan ganti perspektif) diblokir, tapi serang, pakai
+item, jatuhkan, tukar tangan, dan hotbar tetap jalan seperti biasa. Karakter menghadap ke arah kamera, jadi
+membidik tetap mengikuti crosshair, walaupun posisi kamera dan posisi karakter berbeda. Kecepatan, pengali
+sprint, tembus blok, gerak halus, dan arah terbang bisa diatur di layar settings mod.
 
 ## Batasan
 
@@ -76,4 +77,4 @@ Test inti: setelah `cargo horizon-mod check` sekali (mengambil SDK), jalankan `c
 Untuk membuat paket `.hmod` dengan pin build lain, ubah `horizon = "..."` di `horizon-mod.toml` (atau jalankan
 `cargo horizon-mod update`), lalu `cargo horizon-mod build`.
 
-Lisensi MIT | [LICENSE](https://github.com/Aiken1609/uni-freecam/blob/1bd365aa6f8731c457ab149bb488be39f0a7eae2/LICENSE). Logika terbang terinspirasi `freecam_plus` (umbx-dot, MIT).
+Lisensi MIT. Logika terbang terinspirasi `freecam_plus` (umbx-dot, MIT).
