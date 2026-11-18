@@ -72,4 +72,4 @@ di `horizon-mod.toml` dengan commit Nightly tujuan (atau `cargo horizon-mod upda
 
 ## Lisensi
 
-MIT. Logika terbang terinspirasi `freecam_plus` oleh umbx-dot (MIT).
+MIT [LICENSE](https://github.com/Aiken1609/uni-freecam/blob/8c27bd33410294b6c5b63ca84b70fbb461773cdb/LICENSE). Logika terbang terinspirasi `freecam_plus` oleh umbx-dot (MIT).
