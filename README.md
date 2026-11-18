@@ -30,7 +30,7 @@ horizon-launcher native-build . --instance "NamaInstance" --trust-native-code
 ```
 
 Mod ini baru bisa dibangun di build Horizon yang sudah punya API mod bertipe (`mod_api::Hooks`). Pin build ada
-di `horizon-mod.toml` (sekarang commit `87601bd`, main 17 November 2026). Kalau instance kamu masih di Nightly
+di `horizon-mod.toml` (sekarang commit `0b14f8a`, Nightly 18 November 2026). Kalau instance kamu masih di Nightly
 yang lebih tua dan build gagal di tahap SDK, update Horizon dulu, atau pindahkan pin dengan
 `cargo horizon-mod update`.
 
