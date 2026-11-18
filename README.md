@@ -5,7 +5,7 @@
 <h1 align="center">Universal Freecam</h1>
 
 <p align="center">
-  Kamera bebas untuk Horizon (Minecraft Java 26.3 versi Rust).<br>
+  Kamera bebas untuk [Horizon](https://github.com/horizon-rust/horizon) (Minecraft Java 26.3 versi Rust).<br>
   Kamera lepas dari karakter dan terbang ke mana saja, sementara karakter tetap diam.
 </p>
 
