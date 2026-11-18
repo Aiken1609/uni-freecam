@@ -76,4 +76,4 @@ Test inti: setelah `cargo horizon-mod check` sekali (mengambil SDK), jalankan `c
 Untuk membuat paket `.hmod` dengan pin build lain, ubah `horizon = "..."` di `horizon-mod.toml` (atau jalankan
 `cargo horizon-mod update`), lalu `cargo horizon-mod build`.
 
-Lisensi MIT. Logika terbang terinspirasi `freecam_plus` (umbx-dot, MIT).
+Lisensi MIT | LICENSE. Logika terbang terinspirasi `freecam_plus` (umbx-dot, MIT).
