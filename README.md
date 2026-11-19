@@ -12,7 +12,7 @@
 ## Persyaratan
 
 - Horizon launcher **0.2.73** atau lebih baru
-- Instance di Nightly **6d765e0** (18 November 2026) atau yang lebih baru. Build native butuh SDK yang dikirim
+- Instance di Nightly **0b14f8a** (18 November 2026) atau yang lebih baru. Build native butuh SDK yang dikirim
   bersama Nightly, jadi Nightly lama tidak bisa.
 - Mod native dikompilasi di komputer kamu dan berjalan dengan hak akses yang sama seperti game, tanpa sandbox.
   Baca source-nya dulu kalau perlu.
