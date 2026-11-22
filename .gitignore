@@ -2,3 +2,4 @@ build/
 target/
 .horizon/
 Cargo.lock
+mod.wasm

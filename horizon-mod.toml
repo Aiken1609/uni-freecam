@@ -3,12 +3,6 @@ name = "Universal Freecam"
 version = "0.1.0"
 description = "Detach the camera and fly it anywhere while your player stays where it is."
 authors = ["aiken"]
-# A native mod: Rust in src/, compiled by the launcher against the game build [native] pins.
 api = "0.2"
 side = "client"
 capabilities = ["registries"]
-
-[native]
-game = "26.3"
-horizon = "0b14f8acfd97fa2c750e42795249dcc981178ca4"
-mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"

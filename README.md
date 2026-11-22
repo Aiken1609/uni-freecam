@@ -11,25 +11,33 @@
 
 ## Persyaratan
 
-- Horizon launcher **0.2.73** atau lebih baru
-- Instance di Nightly **0b14f8a** (18 November 2026) atau yang lebih baru. Build native butuh SDK yang dikirim
-  bersama Nightly, jadi Nightly lama tidak bisa.
-- Mod native dikompilasi di komputer kamu dan berjalan dengan hak akses yang sama seperti game, tanpa sandbox.
-  Baca source-nya dulu kalau perlu.
+- Horizon Nightly **f037744** (21 November 2026), atau build lain yang API mod-nya masih cocok
+- Mod ini berupa WebAssembly: berjalan di sandbox game, tanpa kompilasi di komputer pemain dan tanpa izin
+  "trust native code"
+- Game memeriksa `mod.wasm` saat memuatnya dan menolak kalau layout API-nya berbeda. Satu paket belum tentu
+  jalan di semua Nightly (lihat Batasan)
 
 ## Pasang
 
-1. Di launcher, buka **Mods**, lalu bagian *Add a native mod from GitHub*.
-2. Tempel `https://github.com/Aiken1609/uni-freecam` dan klik **Add from GitHub**.
-3. Pilih instance di Nightly yang sesuai, klik **Build**, dan setujui peringatan trust. Build pertama bisa lama
-   karena launcher mengunduh toolchain Rust dan SDK.
-4. Mainkan instance itu, masuk dunia, lalu tekan **F4**.
+1. Dapatkan `uni_freecam.hmod` (dari halaman Releases repo ini kalau ada, atau bangun sendiri, lihat bawah).
+2. Di launcher, klik ⋮ pada instance, lalu **Open folder**. Salin `uni_freecam.hmod` ke folder `horizon-mods`.
+3. Tambah satu baris di `horizon-mods.txt` (di sebelah `options.txt`):
+   ```
+   mod.uni_freecam:true
+   ```
+4. Jalankan game, masuk dunia, dan tekan **F4**. Kalau game menolak mod-nya, alasannya tampil merah di layar Mods.
 
-Alternatif lewat terminal:
+## Bangun sendiri
+
+Butuh [rustup](https://rustup.rs) (di Windows juga Visual Studio Build Tools dengan komponen C++).
 
 ```
-horizon-launcher native-build . --instance "NamaInstance" --trust-native-code
+cargo install --locked --git https://github.com/horizon-rust/horizon --rev f037744a79f9982c47876f49c5a3067279f88706 cargo-horizon-mod
+cargo horizon-mod build --wasm
 ```
+
+Hasilnya `target/horizon-mod/uni_freecam.hmod`. Pasang `cargo-horizon-mod` dari commit Nightly yang kamu pakai.
+Build pertama memasang toolchain Rust yang dipin.
 
 ## Kontrol
 
@@ -49,6 +57,8 @@ terbang bisa diatur di layar settings mod.
 
 ## Batasan
 
+- Paket wasm tidak punya rentang versi yang dijamin. Kalau game menolaknya di Nightly lain, bangun ulang untuk
+  build itu: `cargo horizon-mod update --horizon <commit>` lalu `cargo horizon-mod build --wasm`.
 - Kamera selalu menghadap ke arah pandang karakter, jadi kepala karakter ikut menoleh (server bisa melihatnya).
   Posisi tubuh tidak berubah. API mod saat ini belum punya hook untuk delta mouse mentah.
 - Serangan dan pakai item dihitung dari posisi tubuh, bukan posisi kamera.
@@ -66,8 +76,7 @@ src/freecam_core.rs  logika kamera, tanpa dependensi, 15 test
 assets/              file bahasa
 ```
 
-Logika kamera terpisah dari hook game, jadi kalau API berubah cukup `src/lib.rs` yang disesuaikan. Launcher menolak
-file `.rs` dan `.toml` di luar `src/`, jadi repo ini sengaja dibuat minimal. Untuk pindah build, ganti `horizon = "..."`
+Logika kamera terpisah dari hook game, jadi kalau API berubah cukup `src/lib.rs` yang disesuaikan. Untuk pindah build, ganti `horizon = "..."`
 di `horizon-mod.toml` dengan commit Nightly tujuan (atau `cargo horizon-mod update`).
 
 ## Lisensi
