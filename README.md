@@ -19,11 +19,6 @@
 
 ## Pasang
 
-**Lewat launcher (disarankan).** Di launcher buka **Mods**, tempel `https://github.com/Aiken1609/uni-freecam` di
-kolom *Add from GitHub*, lalu klik **Add from GitHub**. Launcher memasang file `.hmod` dari rilis terbaru repo ini.
-Setelah terpasang, aktifkan mod-nya, jalankan game, masuk dunia, dan tekan **F4**.
-
-**Manual.**
 1. Unduh `uni_freecam.hmod` dari halaman [Releases](https://github.com/Aiken1609/uni-freecam/releases)
    (atau bangun sendiri, lihat bawah).
 2. Di launcher, klik ⋮ pada instance, lalu **Open folder**. Salin file itu ke folder `horizon-mods`.
@@ -33,8 +28,7 @@ Setelah terpasang, aktifkan mod-nya, jalankan game, masuk dunia, dan tekan **F4*
    ```
 4. Jalankan game, masuk dunia, dan tekan **F4**. Kalau game menolak mod-nya, alasannya tampil merah di layar Mods.
 
-Memasang dari repo tanpa rilis tidak bisa: mod WebAssembly harus dibangun dulu menjadi `.hmod`, jadi launcher
-butuh rilis yang melampirkan file itu.
+Kolom *Add from GitHub* di launcher hanya menerima mod native, jadi tidak bisa dipakai untuk mod WebAssembly ini.
 
 ## Bangun sendiri
 
